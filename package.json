@@ -23,6 +23,7 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-pdf": "^10.0.1",
+    "react-pdf-highlight": "^1.0.0",
     "react-router-dom": "^7.7.1",
     "tailwind-animate": "^0.2.10",
     "tailwind-merge": "^3.3.1",
