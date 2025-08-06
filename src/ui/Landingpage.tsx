@@ -17,8 +17,8 @@ const LandingPage: React.FC<LandingPageProps> = ({ recentFiles }) => {
   const navigate = useNavigate();
   const handleFileClick = async () => {
     const filePath = await window.electronAPI.openPDFDialog();
-    if (filePath) {
-      navigate('/viewer', { state: { filePath: filePath } });
+    if (filePath !== null) {
+      navigate('/viewer', { state: { filePath  } });
     } else {
       alert("No file selected");
     }

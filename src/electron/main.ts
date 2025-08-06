@@ -13,9 +13,7 @@ function createWindow() {
     const mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        frame: false,
         resizable: true,
-        titleBarStyle: 'hiddenInset',
         movable: true,
         webPreferences: {
             preload: getPreloadPath(),
@@ -44,15 +42,19 @@ function createWindow() {
         return result.filePaths[0];
     });
 
-    ipcMain.handle('read-pdf-buffer',  (event, filePath) => {
-        try {
-            const pdf =  fs.readFileSync(filePath);
-            console.log('PDF file read successfully:', filePath);
-            return pdf.buffer; // Return the ArrayBuffer
-        } catch (error) {
-            console.error('Error reading PDF file:', error);
-            throw error; // Propagate the error to the renderer process
+    ipcMain.handle('read-pdf-buffer', async ( _,filePath) => {
+    try {
+        const pdfBuffer = await fs.promises.readFile(filePath);
+
+        if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
+        throw new Error('PDF file is empty or invalid');
         }
+
+        return pdfBuffer.toString('base64'); // This is a Node.js Buffer
+    } catch (error) {
+        console.error('Error reading PDF file:', error);
+        throw error; // Propagates to renderer as rejected promise
+    }
     });
 
 }
