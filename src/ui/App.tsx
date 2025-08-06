@@ -34,7 +34,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage recentFiles={[]} />} />
-        <Route path="/main" element={<MainPage />} />
         <Route path="/viewer" element={<PDFViewer />} />
       </Routes>
     </BrowserRouter>
