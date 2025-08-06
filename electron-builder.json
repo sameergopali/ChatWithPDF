@@ -1,0 +1,10 @@
+{
+    "appId": "com.samgo.pdfchat",
+    "files": [
+        "dist-electron", 
+        "dist-react"
+    ],
+    "mac":{
+        "target": "dmg"
+    }
+}
