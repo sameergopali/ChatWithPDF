@@ -42,24 +42,11 @@ export const useChatStore = create<ChatStore>((set, get) => ({
 
     set((state) => ({
       messages: [...state.messages, userMessage],
-      inputMessage: '',
+      messageInput: '',
       isAiTyping: true
     }));
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiMessage: ChatMessage = {
-        id: Date.now() + 1,
-        text: `I understand you're asking about: "${userMessage.text}". I can help you analyze this PDF document. What specific information would you like me to extract or explain?`,
-        sender: 'ai',
-        timestamp: new Date()
-      };
-      
-      set((state) => ({
-        messages: [...state.messages, aiMessage],
-        isAiTyping: false
-      }));
-    }, 1000 + Math.random() * 2000);
+    window.electronAPI.chatWithAI([...get().messages, userMessage])
   },
   
   clearMessages: () => set({ messages: [] }),

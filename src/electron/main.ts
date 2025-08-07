@@ -6,6 +6,7 @@ import { buffer } from 'stream/consumers';
 import { fileURLToPath } from 'url';
 
 import { getPreloadPath } from './pathResolver.js';
+import { AIService } from './service/aiService.js';
 import { isDev } from './util.js';
 
 function createWindow() {
@@ -29,6 +30,8 @@ function createWindow() {
     } else {
         mainWindow.loadFile(path.join(app.getAppPath(), '/dist-react/index.html'));
     }
+
+    const aiService: AIService = new AIService();
 
     ipcMain.handle('open-pdf-dialog', async () => {
         const result = await dialog.showOpenDialog({
@@ -55,6 +58,14 @@ function createWindow() {
         console.error('Error reading PDF file:', error);
         throw error; // Propagates to renderer as rejected promise
     }
+    });
+
+    ipcMain.on('chat-with-ai', async (event, messages: { text: string; sender: 'user' | 'ai' }[]) => {
+        console.log('Received messages from renderer:', messages);
+        // Simulate AI response
+        const aiResponse = await aiService.chatWithAI(messages);
+        console.log('AI response:', aiResponse);
+        event.sender.send('ai:chat-response', aiResponse);
     });
 
 }
