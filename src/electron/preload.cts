@@ -4,7 +4,9 @@ export interface ElectronAPI {
   readPDFBuffer: (path: string) => Promise<Uint8Array>;
   openPDFDialog: () => Promise<string | undefined>;
   chatWithAI: (messages: { text: string; sender: 'user' | 'ai' }[]) => Promise<void>;
-  onChatResponse: (callback: (event: any, data: any) => void) => void;
+  onChatResponse: (
+    callback: (event: any, data: any) => void
+  ) => () => void; // returns unsubscribe
 }
 
 contextBridge.exposeInMainWorld("electronAPI", {
@@ -26,6 +28,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
   },
   onChatResponse: (callback: (event: any, data: any) => void) => {
     ipcRenderer.on("ai:chat-response", callback);
+    return () => ipcRenderer.removeListener("ai:chat-response", callback);
   }
   
 });

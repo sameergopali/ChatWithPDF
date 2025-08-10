@@ -9,6 +9,23 @@ export interface ChatMessage {
   timestamp: Date;
 }
 
+// Augment global Window for UI build to access preload API
+declare global {
+  interface Window {
+    electronAPI: ElectronAPI;
+  }
+}
+
+// Mirror of ElectronAPI exposed from preload; duplicated here to avoid importing from excluded electron code in UI tsconfig
+export interface ElectronAPI {
+  readPDFBuffer: (path: string) => Promise<Uint8Array>;
+  openPDFDialog: () => Promise<string | undefined>;
+  chatWithAI: (messages: { text: string; sender: 'user' | 'ai' }[]) => Promise<void>;
+  onChatResponse: (
+    callback: (event: any, data: any) => void
+  ) => () => void;
+}
+
 export interface PDFState{
     numPages?: number;
     pageNumber: number;

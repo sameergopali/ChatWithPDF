@@ -21,16 +21,19 @@ const initialChatState: ChatState = {
 export const useChatStore = create<ChatStore>((set, get) => ({
   ...initialChatState,
 
-  setInputMessage: (messageInput) => set({ messageInput }),
+  setInputMessage: (messageInput) => {console.log(messageInput);set({ messageInput })},
   
-  addMessage: (message) => set((state) => ({
-    messages: [...state.messages, message]
-  })),
+  addMessage: (message) => {
+    console.log(message)
+    set((state) => ({messages: [...state.messages, message]})
+  
+  )},
   
   setIsAiTyping: (isAiTyping) => set({ isAiTyping }),
   
   sendMessage: async () => {
     const { messageInput } = get();
+    console.log("got message",messageInput)
     if (!messageInput.trim()) return;
 
     const userMessage: ChatMessage = {
@@ -39,14 +42,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       sender: 'user',
       timestamp: new Date()
     };
-
+    console.log(userMessage)
     set((state) => ({
       messages: [...state.messages, userMessage],
       messageInput: '',
       isAiTyping: true
     }));
+    
 
-    window.electronAPI.chatWithAI([...get().messages, userMessage])
+    window.electronAPI.chatWithAI([...get().messages])
   },
   
   clearMessages: () => set({ messages: [] }),

@@ -28,23 +28,14 @@ export const ContextMenu: React.FC = () => {
   }, [contextMenu.isVisible, hideContextMenu]);
   const handleCopyText = () => {
     if (contextMenu.selectedText) {
-      navigator.clipboard.writeText(contextMenu.selectedText).then(() => {
-        console.log('Text copied to clipboard');
-      }).catch((err) => {
-        console.error('Failed to copy text: ', err);
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = contextMenu.selectedText;
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        try {
-          document.execCommand('copy');
-        } catch (err) {
-          console.error('Fallback: Failed to copy text: ', err);
-        }
-        document.body.removeChild(textArea);
-      });
+      navigator.clipboard
+        .writeText(contextMenu.selectedText)
+        .then(() => {
+          console.log('Text copied to clipboard');
+        })
+        .catch((err) => {
+          console.error('Failed to copy text: ', err);
+        });
     }
     hideContextMenu();
   };
