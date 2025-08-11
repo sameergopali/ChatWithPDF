@@ -1,5 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
+import dotenv from "dotenv";
 
 import { getPreloadPath } from './pathResolver.js'
 import { isDev } from './util.js'
@@ -7,6 +8,7 @@ import { DialogService } from './service/dialogService.js'
 import { PDFService } from './service/pdfService.js'
 import { AIService } from './service/aiService.js'
 import { registerIpcHandlers } from './service/ipc/registerIpcHandlers.js'
+import { RagService } from './service/ragService.js'
 
 function createWindow() {
     
@@ -29,11 +31,13 @@ function createWindow() {
     } else {
         mainWindow.loadFile(path.join(app.getAppPath(), '/dist-react/index.html'));
     }
-
+    dotenv.config()
+    const ragService =  new RagService()
     const services = {
         dialogService: new DialogService(),
         pdfService: new PDFService(),
-        aiService: new AIService(),
+        aiService: new AIService(ragService),
+        ragService: ragService,
     }
     registerIpcHandlers(services)
 

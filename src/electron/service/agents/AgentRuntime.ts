@@ -1,13 +1,5 @@
-export type AgentRuntimeKind = 'mock' | 'langchain' | 'langgraph'
+export type AgentRuntimeKind = 'mock' | 'dev' | 'qarag'
 
-export interface MCPServerConfig {
-  name: string
-  command?: string
-  args?: string[]
-  transport?: 'stdio' | 'http'
-  baseUrl?: string
-  env?: Record<string, string>
-}
 
 export interface AgentConfig {
   runtime: AgentRuntimeKind
@@ -17,7 +9,6 @@ export interface AgentConfig {
   model?: string
   temperature?: number
   maxTokens?: number
-  mcpServers?: MCPServerConfig[]
 }
 
 export interface ChatMessageLike {
