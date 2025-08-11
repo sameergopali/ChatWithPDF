@@ -18,7 +18,7 @@ export const ChatInput: React.FC = () => {
         <textarea
           value={messageInput}
           onChange={(e) => setInputMessage(e.target.value)}
-          onKeyPress={handleKeyPress}
+          onKeyDown={handleKeyPress}
           placeholder="Ask about this PDF..."
           className="flex-1 px-3 py-2.5 border border-gray-300 rounded-2xl resize-none min-h-[20px] max-h-[100px] text-sm outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
           rows={1}

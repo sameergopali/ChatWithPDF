@@ -1,5 +1,13 @@
 import { ipcRenderer, contextBridge } from "electron";
 
+export interface ElectronAPI {
+  readPDFBuffer: (path: string) => Promise<Uint8Array>;
+  openPDFDialog: () => Promise<string | undefined>;
+  chatWithAI: (messages: { text: string; sender: 'user' | 'ai' }[]) => Promise<void>;
+  onChatResponse: (
+    callback: (event: any, data: any) => void
+  ) => () => void; // returns unsubscribe
+}
 
 contextBridge.exposeInMainWorld("electronAPI", {
   openPDFDialog: async () =>  {
@@ -14,5 +22,13 @@ contextBridge.exposeInMainWorld("electronAPI", {
       buffer[i] = binary.charCodeAt(i);
     }
     return buffer;
+  },
+  chatWithAI: (messages: { text: string; sender: 'user' | 'ai' }[]) => {
+    return ipcRenderer.send("chat-with-ai", messages);
+  },
+  onChatResponse: (callback: (event: any, data: any) => void) => {
+    ipcRenderer.on("ai:chat-response", callback);
+    return () => ipcRenderer.removeListener("ai:chat-response", callback);
   }
+  
 });

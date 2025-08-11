@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 
+import { useChatListener } from '../hooks/useChatListener';
 import { useChatStore } from '../stores/chatStore';
 import { useUIStore } from '../stores/uiStore';
 import { ChatInput } from './ChatInput';
@@ -9,6 +10,7 @@ export const ChatSidebar: React.FC = () => {
   const { messages, isAiTyping } = useChatStore();
   const { isSidebarOpen, sidebarWidth, toggleSidebar } = useUIStore();
   const chatContainerRef = useRef<HTMLDivElement>(null);
+  useChatListener();
 
   if (!isSidebarOpen) return null;
 

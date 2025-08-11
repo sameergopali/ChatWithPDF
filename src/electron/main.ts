@@ -1,12 +1,14 @@
-import {app, BrowserWindow, ipcMain, dialog} from 'electron';
-import fs from 'fs'
-import { get } from 'http';
-import path from 'path';
-import { buffer } from 'stream/consumers';
-import { fileURLToPath } from 'url';
+import { app, BrowserWindow } from 'electron'
+import path from 'path'
+import dotenv from "dotenv";
 
-import { getPreloadPath } from './pathResolver.js';
-import { isDev } from './util.js';
+import { getPreloadPath } from './pathResolver.js'
+import { isDev } from './util.js'
+import { DialogService } from './service/dialogService.js'
+import { PDFService } from './service/pdfService.js'
+import { AIService } from './service/aiService.js'
+import { registerIpcHandlers } from './service/ipc/registerIpcHandlers.js'
+import { RagService } from './service/ragService.js'
 
 function createWindow() {
     
@@ -29,33 +31,15 @@ function createWindow() {
     } else {
         mainWindow.loadFile(path.join(app.getAppPath(), '/dist-react/index.html'));
     }
-
-    ipcMain.handle('open-pdf-dialog', async () => {
-        const result = await dialog.showOpenDialog({
-            filters: [{ name: 'PDF Files', extensions: ['pdf'] }],
-            properties: ['openFile'],
-        });
-
-        if (result.canceled || result.filePaths.length === 0) {
-            return null;
-        }
-        return result.filePaths[0];
-    });
-
-    ipcMain.handle('read-pdf-buffer', async ( _,filePath) => {
-    try {
-        const pdfBuffer = await fs.promises.readFile(filePath);
-
-        if (!Buffer.isBuffer(pdfBuffer) || pdfBuffer.length === 0) {
-        throw new Error('PDF file is empty or invalid');
-        }
-
-        return pdfBuffer.toString('base64'); // This is a Node.js Buffer
-    } catch (error) {
-        console.error('Error reading PDF file:', error);
-        throw error; // Propagates to renderer as rejected promise
+    dotenv.config()
+    const ragService =  new RagService()
+    const services = {
+        dialogService: new DialogService(),
+        pdfService: new PDFService(),
+        aiService: new AIService(ragService),
+        ragService: ragService,
     }
-    });
+    registerIpcHandlers(services)
 
 }
 

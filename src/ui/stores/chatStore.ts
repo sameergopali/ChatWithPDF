@@ -21,16 +21,19 @@ const initialChatState: ChatState = {
 export const useChatStore = create<ChatStore>((set, get) => ({
   ...initialChatState,
 
-  setInputMessage: (messageInput) => set({ messageInput }),
+  setInputMessage: (messageInput) => {console.log(messageInput);set({ messageInput })},
   
-  addMessage: (message) => set((state) => ({
-    messages: [...state.messages, message]
-  })),
+  addMessage: (message) => {
+    console.log(message)
+    set((state) => ({messages: [...state.messages, message]})
+  
+  )},
   
   setIsAiTyping: (isAiTyping) => set({ isAiTyping }),
   
   sendMessage: async () => {
     const { messageInput } = get();
+    console.log("got message",messageInput)
     if (!messageInput.trim()) return;
 
     const userMessage: ChatMessage = {
@@ -39,27 +42,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       sender: 'user',
       timestamp: new Date()
     };
-
+    console.log(userMessage)
     set((state) => ({
       messages: [...state.messages, userMessage],
-      inputMessage: '',
+      messageInput: '',
       isAiTyping: true
     }));
+    
 
-    // Simulate AI response
-    setTimeout(() => {
-      const aiMessage: ChatMessage = {
-        id: Date.now() + 1,
-        text: `I understand you're asking about: "${userMessage.text}". I can help you analyze this PDF document. What specific information would you like me to extract or explain?`,
-        sender: 'ai',
-        timestamp: new Date()
-      };
-      
-      set((state) => ({
-        messages: [...state.messages, aiMessage],
-        isAiTyping: false
-      }));
-    }, 1000 + Math.random() * 2000);
+    window.electronAPI.chatWithAI([...get().messages])
   },
   
   clearMessages: () => set({ messages: [] }),
