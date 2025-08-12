@@ -20,15 +20,7 @@ export const ChatSidebar: React.FC = () => {
       style={{ width: `${sidebarWidth}px` }}
     >
       {/* Chat Header */}
-      <div className="px-5 py-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-        <h3 className="m-0 text-base font-semibold text-gray-800">AI Assistant</h3>
-        <button
-          onClick={toggleSidebar}
-          className="bg-none border-none text-lg cursor-pointer p-0 text-gray-600 hover:text-gray-800 transition-colors"
-        >
-          ×
-        </button>
-      </div>
+     
 
       {/* Chat Messages */}
       <div

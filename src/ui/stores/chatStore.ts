@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-
 import { ChatState, ChatMessage } from '../types';
 
 interface ChatStore extends ChatState {
@@ -31,11 +30,15 @@ export const useChatStore = create<ChatStore>((set, get) => ({
   
   setIsAiTyping: (isAiTyping) => set({ isAiTyping }),
   
+  
+  
   sendMessage: async () => {
     const { messageInput } = get();
     console.log("got message",messageInput)
     if (!messageInput.trim()) return;
 
+    // Check LLM configuration before sending
+   
     const userMessage: ChatMessage = {
       id: Date.now(),
       text: messageInput,
@@ -49,12 +52,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
       isAiTyping: true
     }));
     
-
-    window.electronAPI.chatWithAI([...get().messages])
+    window.electronAPI.chatWithAI([userMessage])
   },
   
   clearMessages: () => set({ messages: [] }),
   sendSelectedText: (selectedText) => {
+  
     const userMessage: ChatMessage = {
       id: Date.now(),
       text: selectedText,

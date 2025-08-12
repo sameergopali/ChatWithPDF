@@ -1,5 +1,6 @@
 ## PDFChat — PDF reader with ai chat
 PDFChat is a desktop PDF reader that lets you open PDFs, and chat with AI about the content.Built with Electron for the desktop shell, React for the UI, and LangChain for AI-powered retrieval-augmented generation (RAG).
+![Demo](demo/demo-pdf.gif)
 
 ### Features
 - **PDF viewing**: Single page and continuous modes, zoom, fit-to-width/page, page navigation.
