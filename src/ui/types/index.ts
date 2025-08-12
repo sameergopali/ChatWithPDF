@@ -1,12 +1,36 @@
 export type ViewMode = 'single' | 'continuous';
 export type FitMode = 'none' | 'width' | 'page';
 
-
 export interface ChatMessage {
   id: number;
   text: string;
   sender: 'user' | 'ai';
   timestamp: Date;
+}
+
+// LLM Model Provider Types
+export type ModelProviderType =  'google' ;
+
+export interface ModelInfo {
+  id: string;
+  name: string;
+  description?: string;
+}
+
+export interface ModelProvider {
+  id: string;
+  type: ModelProviderType;
+  apiKey?: string;
+  isConfigured: boolean;
+  isActive: boolean;
+  models: ModelInfo[];
+  selectedModelId?: string;
+}
+
+export interface LLMConfigState {
+  providers: ModelProvider[];
+  activeProviderId?: string;
+
 }
 
 // Augment global Window for UI build to access preload API
@@ -49,6 +73,7 @@ export interface UIState {
     sidebarWidth: number;
     isResizing: boolean;
     containerWidth: number;
+    isSettingsOpen: boolean;
 }
 
 export interface ContextMenuState {
@@ -57,3 +82,4 @@ export interface ContextMenuState {
     y: number;
     selectedText: string;
 }
+

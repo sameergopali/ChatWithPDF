@@ -13,6 +13,7 @@ interface UIStore extends UIState {
   handleSidebarResize: (clientX: number) => void;
   showContextMenu: (x: number, y: number, selectedText: string) => void;
   hideContextMenu: () => void;
+  setSettingsOpen: (isOpen: boolean) => void;
 }
 
 const initialUIState: UIState = {
@@ -20,6 +21,7 @@ const initialUIState: UIState = {
   sidebarWidth: 350,
   isResizing: false,
   containerWidth: 800,
+  isSettingsOpen: false,
 };
 
 export const useUIStore = create<UIStore>((set) => ({
@@ -54,4 +56,6 @@ export const useUIStore = create<UIStore>((set) => ({
   hideContextMenu: () => set({
     contextMenu: { isVisible: false, x: 0, y: 0, selectedText: '' }
   }),
+
+  setSettingsOpen: (isSettingsOpen) => set({ isSettingsOpen }),
 }));
